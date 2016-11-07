@@ -13,7 +13,7 @@ namespace ichargermon {
 ICharger::ICharger(const char *device_path) {
   fd_ = open(device_path, O_RDONLY | O_NOCTTY | O_NONBLOCK);
   if (fd_ < 0) {
-    fprintf(stderr, "Error opening device %s wtih error %s\n",
+    fprintf(stderr, "Error opening device %s with error %s\n",
         device_path, strerror(errno));
     return;
   }
