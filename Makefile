@@ -30,7 +30,7 @@ LDFLAGS =
 
 # CLI Linker Flags #############################################################
 
-CLIENT_LDFLAGS  = $(LDFLAGS)
+ICHARGERMON_LDFLAGS  = $(LDFLAGS)
 
 # Build Targets ################################################################
 
