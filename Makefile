@@ -4,43 +4,49 @@
 #
 ################################################################################
 
-# CLI Sources ##################################################################
+# Sources ######################################################################
 
-ICHARGERMON_SRCS = src/main.cpp
-ICHARGERMON_SRCS += src/icharger.cpp
-ICHARGERMON_SRCS += src/icharger_state.cpp
+SRCS = src/main.cpp
+SRCS += src/icharger.cpp
+SRCS += src/icharger_state.cpp
 
 # Binary Targets ###############################################################
 
-ICHARGERMON_BIN = ichargermon
+BIN = ichargermon
 
-# Common Compiler Flags ########################################################
+# Compiler Flags ###############################################################
 
 CFLAGS  = -std=c++11
 CFLAGS += -Isrc/
 CFLAGS += -Wall
+CFLAGS += `pkg-config --cflags $(LIBHIDAPI)`
 
-# CLI Compiler Flags ###########################################################
+# HIDAPI Support ###############################################################
 
-ICHARGERMON_CFLAGS = $(CFLAGS)
+# When targetting Linux there are two options given for hidapi, but neither are
+# called 'hidapi' which mandates the use of this condition.
 
-# Common Linker Flags ##########################################################
+HOST_OS = $(shell uname)
 
-LDFLAGS =
+ifeq ($(HOST_OS), Linux)
+LIBHIDAPI = hidapi-libusb
+else
+LIBHIDAPI = hidapi
+endif
 
-# CLI Linker Flags #############################################################
+# Linker Flags #################################################################
 
-ICHARGERMON_LDFLAGS  = $(LDFLAGS)
+LDFLAGS = `pkg-config --libs $(LIBHIDAPI)`
 
 # Build Targets ################################################################
 
-all: $(ICHARGERMON_BIN)
+all: $(BIN)
 
-$(ICHARGERMON_BIN): $(ICHARGERMON_SRCS)
-	g++ $(ICHARGERMON_CFLAGS) $(ICHARGERMON_LDFLAGS) $^ -o $@
+$(BIN): $(SRCS)
+	g++ $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-run_ichargermon: ichargermon
-	./$(ICHARGERMON_BIN)
+run_ichargermon: $(BIN)
+	./$(BIN)
 
 clean:
-	rm -f $(ICHARGERMON_BIN)
+	rm -f $(BIN)
