@@ -16,6 +16,8 @@
 
 #include "icharger.h"
 
+#include <tclap/CmdLine.h>
+
 using namespace ichargermon;
 
 /**
@@ -23,22 +25,64 @@ using namespace ichargermon;
  */
 constexpr char kDefaultDevTty[] = "/dev/ttyUSB0";
 
+//! A description of this tool.
+constexpr char kToolDescription[] =
+    "a tool for interacting with PowerUSB USB-controlled power strips";
+
+//! A string constant for serial-port based devices.
+const char kSerialPortDevice[] = "serial";
+
+//! A string constant for USB based devices.
+const char kUsbPortDevice[] = "usb";
+
+//! The current version of this tool. Defined according to the rules of
+//! semantic versioning.
+constexpr char kVersionString[] = "0.1.0";
+
 int main(int argc, char **argv) {
-  // If an argument is supplied, use that as the file path to open.
-  const char *uart_file_path = kDefaultDevTty;
-  if (argc == 2) {
-    uart_file_path = argv[1];
-  }
+  using TCLAP::CmdLine;
+  using TCLAP::SwitchArg;
+  using TCLAP::ValueArg;
+  using TCLAP::ValuesConstraint;
 
-  ICharger icharger(uart_file_path);
-  if (!icharger.IsInitialized()) {
-    fprintf(stderr, "iCharger not initialized. Quitting.\n");
+  // The command line object with tool description and version.
+  CmdLine cmd(kToolDescription, ' ', kVersionString);
+
+  // The allowable device types.
+  std::vector<std::string> allowed_device_types;
+  allowed_device_types.push_back(kSerialPortDevice);
+  allowed_device_types.push_back(kUsbPortDevice);
+  ValuesConstraint<std::string> device_types_constraint(allowed_device_types);
+
+  // The device type argument.
+  ValueArg<std::string> device_type_arg("", "device_type",
+      "The type of the device.", true, "string", &device_types_constraint, cmd);
+
+  // The device path argument.
+  ValueArg<std::string> serial_device_path_arg("", "device_path",
+      "The serial device path.", false, kDefaultDevTty, "string", cmd);
+
+  // Parse the provided command line arguments.
+  cmd.parse(argc, argv);
+
+  if (device_type_arg.getValue() == kSerialPortDevice) {
+    std::string device_path = serial_device_path_arg.getValue();
+  
+    ICharger icharger(device_path.c_str());
+    if (!icharger.IsInitialized()) {
+      fprintf(stderr, "iCharger not initialized. Quitting.\n");
+      return -1;
+    }
+  
+    while (1) {
+      IChargerState charger_state = icharger.ReadState();
+      fprintf(stderr, "%s\n", charger_state.ToPrettyString().c_str());
+    }
+  } else if (device_type_arg.getValue() == kUsbPortDevice) {
+    // TODO: Add support for USB!
+  } else {
+    fprintf(stderr, "Invalid device type\n");
     return -1;
-  }
-
-  while (1) {
-    IChargerState charger_state = icharger.ReadState();
-    fprintf(stderr, "%s\n", charger_state.ToPrettyString().c_str());
   }
 
   return 0;
