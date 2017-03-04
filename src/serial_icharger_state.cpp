@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "icharger_state.h"
+#include "serial_icharger_state.h"
 
 #include <sstream>
 #include <vector>
@@ -26,7 +26,7 @@ namespace ichargermon {
  */
 constexpr size_t kPacketFieldCount = 20;
 
-IChargerState::IChargerState()
+SerialIChargerState::SerialIChargerState()
     : input_voltage_(0.0f),
       battery_voltage_(0.0f),
       battery_amps_(0.0f),
@@ -65,7 +65,7 @@ bool ParseFloat(const std::string& str, float *f) {
   return str.c_str() != end_ptr;
 }
 
-bool IChargerState::ParsePacket(std::string packet) {
+bool SerialIChargerState::ParsePacket(std::string packet) {
   std::vector<std::string> fields = SplitString(packet, ';');
   if (fields.size() != kPacketFieldCount) {
     fprintf(stderr, "Received malformed packet. "
@@ -112,7 +112,7 @@ bool IChargerState::ParsePacket(std::string packet) {
   return true;
 }
 
-std::string IChargerState::ToPrettyString() const {
+std::string SerialIChargerState::ToPrettyString() const {
   std::string pretty_string;
 
   const char kFormatString[] =

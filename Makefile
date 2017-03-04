@@ -7,8 +7,8 @@
 # Sources ######################################################################
 
 SRCS = src/main.cpp
-SRCS += src/icharger.cpp
-SRCS += src/icharger_state.cpp
+SRCS += src/serial_icharger.cpp
+SRCS += src/serial_icharger_state.cpp
 
 # Binary Targets ###############################################################
 

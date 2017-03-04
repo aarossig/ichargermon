@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "icharger.h"
+#include "serial_icharger.h"
 
 #include <tclap/CmdLine.h>
 
@@ -68,14 +68,14 @@ int main(int argc, char **argv) {
   if (device_type_arg.getValue() == kSerialPortDevice) {
     std::string device_path = serial_device_path_arg.getValue();
   
-    ICharger icharger(device_path.c_str());
+    SerialICharger icharger(device_path.c_str());
     if (!icharger.IsInitialized()) {
       fprintf(stderr, "iCharger not initialized. Quitting.\n");
       return -1;
     }
   
     while (1) {
-      IChargerState charger_state = icharger.ReadState();
+      SerialIChargerState charger_state = icharger.ReadState();
       fprintf(stderr, "%s\n", charger_state.ToPrettyString().c_str());
     }
   } else if (device_type_arg.getValue() == kUsbPortDevice) {

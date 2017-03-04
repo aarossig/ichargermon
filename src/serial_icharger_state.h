@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ICHARGERMON_ICHARGER_STATE_H_
-#define ICHARGERMON_ICHARGER_STATE_H_
+#ifndef ICHARGERMON_SERIAL_ICHARGER_STATE_H_
+#define ICHARGERMON_SERIAL_ICHARGER_STATE_H_
 
 #include <array>
 #include <string>
@@ -25,12 +25,12 @@ namespace ichargermon {
 /**
  * Stores the state associated with an iCharger.
  */
-class IChargerState {
+class SerialIChargerState {
  public:
   /**
    * Initializes the state to zero.
    */
-  IChargerState();
+  SerialIChargerState();
 
   /**
    * Parses a packet from a string.
@@ -67,4 +67,4 @@ class IChargerState {
 
 }  // namespace ichargermon
 
-#endif  // ICHARGERMON_ICHARGER_STATE_H_
+#endif  // ICHARGERMON_SERIAL_ICHARGER_STATE_H_

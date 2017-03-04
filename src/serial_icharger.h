@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef ICHARGERMON_ICHARGER_H_
-#define ICHARGERMON_ICHARGER_H_
+#ifndef ICHARGERMON_SERIAL_ICHARGER_H_
+#define ICHARGERMON_SERIAL_ICHARGER_H_
 
-#include "icharger_state.h"
+#include "serial_icharger_state.h"
 
 namespace ichargermon {
 
 /**
  * Contains the logic associated with interfacing with an iCharger.
  */
-class ICharger {
+class SerialICharger {
  public:
   /**
    * Constructs an ICharger by opening the device. The IsInitialized method
    * must be tested before invoking ReadState.
    */
-  ICharger(const char *device_path);
+  SerialICharger(const char *device_path);
 
   /**
    * Determine whether the ICharger was initialized correctly.
@@ -45,7 +45,7 @@ class ICharger {
    * @return An IChargerState object that is populated with data from an
    * iCharger.
    */
-  IChargerState ReadState() const;
+  SerialIChargerState ReadState() const;
 
  private:
   /**
@@ -56,4 +56,4 @@ class ICharger {
 
 }  // namespace ichargermon
 
-#endif  // ICHARGERMON_ICHARGER_H_
+#endif  // ICHARGERMON_SERIAL_ICHARGER_H_

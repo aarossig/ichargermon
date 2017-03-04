@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "icharger.h"
+#include "serial_icharger.h"
 
 #include <cstdio>
 
@@ -26,7 +26,7 @@
 
 namespace ichargermon {
 
-ICharger::ICharger(const char *device_path) {
+SerialICharger::SerialICharger(const char *device_path) {
   fd_ = open(device_path, O_RDONLY | O_NOCTTY | O_NONBLOCK);
   if (fd_ < 0) {
     fprintf(stderr, "Error opening device %s with error %s\n",
@@ -42,7 +42,7 @@ ICharger::ICharger(const char *device_path) {
   tcsetattr(fd_, TCSANOW, &options);
 }
 
-bool ICharger::IsInitialized() const {
+bool SerialICharger::IsInitialized() const {
   return fd_ >= 0;
 }
 
@@ -69,10 +69,10 @@ std::string ReadChargerPacket(int fd) {
   return packet_buffer;
 }
 
-IChargerState ICharger::ReadState() const {
+SerialIChargerState SerialICharger::ReadState() const {
   while (1) {
     std::string packet = ReadChargerPacket(fd_);
-    IChargerState charger_state;
+    SerialIChargerState charger_state;
     if (charger_state.ParsePacket(packet)) {
       return charger_state;
     }
