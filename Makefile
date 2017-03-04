@@ -9,6 +9,7 @@
 SRCS = src/main.cpp
 SRCS += src/serial_icharger.cpp
 SRCS += src/serial_icharger_state.cpp
+SRCS += src/mod_bus_icharger.cpp
 
 # Binary Targets ###############################################################
 

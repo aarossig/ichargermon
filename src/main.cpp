@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "mod_bus_icharger.h"
 #include "serial_icharger.h"
 
 #include <tclap/CmdLine.h>
@@ -70,7 +71,7 @@ int main(int argc, char **argv) {
   
     SerialICharger icharger(device_path.c_str());
     if (!icharger.IsInitialized()) {
-      fprintf(stderr, "iCharger not initialized. Quitting.\n");
+      fprintf(stderr, "Serial iCharger not initialized. Quitting\n");
       return -1;
     }
   
@@ -79,7 +80,13 @@ int main(int argc, char **argv) {
       fprintf(stderr, "%s\n", charger_state.ToPrettyString().c_str());
     }
   } else if (device_type_arg.getValue() == kModBusPortDevice) {
-    // TODO: Add support for USB!
+    ModBusICharger icharger;
+    if (!icharger.IsInitialized()) {
+      fprintf(stderr, "ModBus iCharger not initialized. Quitting\n");
+      return -1;
+    }
+
+    fprintf(stderr, "ModBus initialized");
   } else {
     fprintf(stderr, "Invalid device type\n");
     return -1;
