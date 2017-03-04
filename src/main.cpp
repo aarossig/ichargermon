@@ -33,7 +33,7 @@ constexpr char kToolDescription[] =
 const char kSerialPortDevice[] = "serial";
 
 //! A string constant for USB based devices.
-const char kUsbPortDevice[] = "usb";
+const char kModBusPortDevice[] = "mod_bus";
 
 //! The current version of this tool. Defined according to the rules of
 //! semantic versioning.
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
   // The allowable device types.
   std::vector<std::string> allowed_device_types;
   allowed_device_types.push_back(kSerialPortDevice);
-  allowed_device_types.push_back(kUsbPortDevice);
+  allowed_device_types.push_back(kModBusPortDevice);
   ValuesConstraint<std::string> device_types_constraint(allowed_device_types);
 
   // The device type argument.
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
       SerialIChargerState charger_state = icharger.ReadState();
       fprintf(stderr, "%s\n", charger_state.ToPrettyString().c_str());
     }
-  } else if (device_type_arg.getValue() == kUsbPortDevice) {
+  } else if (device_type_arg.getValue() == kModBusPortDevice) {
     // TODO: Add support for USB!
   } else {
     fprintf(stderr, "Invalid device type\n");
